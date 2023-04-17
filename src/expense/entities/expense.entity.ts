@@ -10,11 +10,6 @@ export class Expense {
   @Prop({
     index: true,
   })
-  expenseTypeId: string;
-
-  @Prop({
-    index: true,
-  })
   categoryId: string;
 
   @Prop()

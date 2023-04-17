@@ -7,6 +7,11 @@ export class Category {
     index: true,
   })
   description: string;
+
+  @Prop({
+    index: true,
+  })
+  operationType: string;
 }
 
 export const CategorySchema = SchemaFactory.createForClass(Category);

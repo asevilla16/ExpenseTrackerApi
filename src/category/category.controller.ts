@@ -25,6 +25,11 @@ export class CategoryController {
     return this.categoryService.findAll();
   }
 
+  @Get('find-by-operation-type/:operationTypeId')
+  findByOperationType(@Param('operationTypeId') operationTypeId: string) {
+    return this.categoryService.findByOperationType(operationTypeId);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.categoryService.findOne(id);
@@ -35,7 +40,7 @@ export class CategoryController {
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    return this.categoryService.update(+id, updateCategoryDto);
+    return this.categoryService.update(id, updateCategoryDto);
   }
 
   @Delete(':id')

@@ -5,15 +5,11 @@ export class CreateExpenseDto {
   name: string;
 
   @IsString()
-  expenseTypeId: string;
-
-  @IsString()
   categoryId: string;
 
   @IsInt()
   @Min(1)
   amount: number;
 
-  @IsDateString()
   date: Date;
 }

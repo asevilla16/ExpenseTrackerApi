@@ -20,6 +20,7 @@ export class ExpenseService {
   async create(createExpenseDto: CreateExpenseDto) {
     try {
       const expense = new this.expenseModel(createExpenseDto);
+      expense.date = new Date();
       return expense.save();
     } catch (error) {
       this.handleErrors(error);
@@ -28,6 +29,12 @@ export class ExpenseService {
 
   findAll() {
     return this.expenseModel.find();
+  }
+
+  findIncomesGroupedByCategory() {
+    return this.expenseModel.aggregate([
+      { $group: { _id: '$categoryId', total: { $sum: '$amount' } } },
+    ]);
   }
 
   async findOne(id: string) {
@@ -40,12 +47,25 @@ export class ExpenseService {
     return expense;
   }
 
-  update(id: number, updateExpenseDto: UpdateExpenseDto) {
-    return `This action updates a #${id} expense`;
+  async update(id: string, updateExpenseDto: UpdateExpenseDto) {
+    const expense = await this.findOne(id);
+
+    try {
+      await expense.updateOne(updateExpenseDto, { new: true });
+      return { ...expense.toJSON(), ...updateExpenseDto };
+    } catch (error) {
+      this.handleErrors(error);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} expense`;
+  async remove(id: string) {
+    const result = await this.expenseModel.deleteOne({ _id: id });
+
+    if (result.deletedCount === 0) {
+      throw new BadRequestException(`Expense with id "${id}" not found`);
+    }
+
+    return result;
   }
 
   private handleErrors(error) {

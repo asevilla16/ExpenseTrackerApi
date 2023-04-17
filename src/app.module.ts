@@ -1,15 +1,20 @@
 import { Module } from '@nestjs/common';
-import { ExpenseTypeModule } from './expense-type/expense-type.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from '@nestjs/config';
 import { CategoryModule } from './category/category.module';
 import { ExpenseModule } from './expense/expense.module';
+import { IncomeModule } from './income/income.module';
+import { EnvConfiguration } from 'config/env.config';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017/expense-tracker'),
-    ExpenseTypeModule,
+    ConfigModule.forRoot({
+      load: [EnvConfiguration],
+    }),
+    MongooseModule.forRoot(process.env.MONGO),
     CategoryModule,
     ExpenseModule,
+    IncomeModule,
   ],
   controllers: [],
   providers: [],

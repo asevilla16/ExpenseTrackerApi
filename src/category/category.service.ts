@@ -30,6 +30,10 @@ export class CategoryService {
     return this.categoryModel.find();
   }
 
+  async findByOperationType(operationType: string) {
+    return this.categoryModel.find({ operationType: operationType });
+  }
+
   async findOne(id: string) {
     let category = await this.categoryModel.findById(id);
 
@@ -40,8 +44,15 @@ export class CategoryService {
     return category;
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: string, updateCategoryDto: UpdateCategoryDto) {
+    const category = await this.findOne(id);
+
+    try {
+      await category.updateOne(updateCategoryDto, { new: true });
+      return { ...category.toJSON(), ...updateCategoryDto };
+    } catch (error) {
+      this.handleErrors(error);
+    }
   }
 
   remove(id: number) {
