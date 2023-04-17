@@ -11,7 +11,9 @@ import { EnvConfiguration } from 'config/env.config';
     ConfigModule.forRoot({
       load: [EnvConfiguration],
     }),
-    MongooseModule.forRoot(process.env.MONGO),
+    MongooseModule.forRoot(
+      'mongodb+srv://expensesdb_user:3vrQHzXcF97xJffa@cluster0.pnuunpn.mongodb.net/expense-tracker',
+    ),
     CategoryModule,
     ExpenseModule,
     IncomeModule,
